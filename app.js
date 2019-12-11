@@ -1,40 +1,51 @@
-const http = require('http');
-const fs = require('fs');
+const express = require("express");
+const app = express();
 
-function serveStaticFile(res, path, contentType, responseCode) {
-	if(!responseCode) responseCode = 200;
-	fs.readFile(__dirname + path, function(err,data) {
-		if(err) {
-			res.writeHead(500, { 'Content-Type': 'text/plain' });
-			res.end('500 - Internal Error');
-			console.log(err);
-		} else {
-			res.writeHead(responseCode, { 'Content-Type': contentType });
-			res.end(data);
-		}
+var fortune = require('./lib/fortune.js');
+
+var handlebars = require('express-handlebars')
+	.create({ defaultLayout:'main', extname: '.hbs' });
+
+app.set('port', process.env.PORT || 3000);
+app.engine('hbs', handlebars.engine);
+app.set('view engine', 'hbs');
+app.use(express.static(__dirname + '/public'));
+
+
+var fortunes = [
+	"Победи свои страхи, или они победят тебя.",
+	"Рекам нужны истоки.",
+	"Не бойся неведомого.",
+	"Тебя ждет приятный сюрприз.",
+	"Будь проще везде, где только можно.",
+];
+
+app.get('/', (req, res) => {
+	res.render('home');
+});
+
+app.get('/about', (req, res) => {
+	res.render('about', {
+		fortune: fortune.getFortune()
 	});
-}
+});
 
+// пользовательская страница 404
+app.use( (req, res) => {
+	res.type('text/html');
+	res.status(404);
+	res.render('404');
+});
 
+// пользовательская страница 500
+app.use((err, req, res, next) => {
+	console.error(err.stack);
+	res.type('text/html');
+	res.status(500);
+	res.render('500');
+});
 
-http.createServer((req, res) => {
-	// res.end('Hello World!');
-	var path = req.url.replace(/\/?(?:\?.*)?$/, '').toLowerCase();
-	switch(path) {
-		case '':
-			res.writeHead(200, {'Content-Toe': 'text/plain'});
-			serveStaticFile(res, '/static/home.html', 'text/html');
-			break;
-		case '/about':
-			serveStaticFile(res, '/static/about.html', 'text/html');
-			res.end('About US');
-			break;
-		case '/img/logo.jpg':
-			serveStaticFile(res, '/static/img/logo.jpg', 'image/jpeg');
-			break;
-		default:
-			res.writeHead(404, {'Content-Toe': 'text/plain'});
-			serveStaticFile(res, '/static/404.html', 'text/html', 404);
-			break;
-	}
-}).listen(3000);
+app.listen(app.get('port'), function() {
+	console.log( 'Express запущен на http://localhost:' +
+	app.get('port') + '; нажмите Ctrl+C для завершения.' );
+});
