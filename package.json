@@ -9,8 +9,16 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">= 0.10"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "zombie": "^6.1.4"
   }
 }
