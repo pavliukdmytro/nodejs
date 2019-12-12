@@ -7450,7 +7450,7 @@ exports.clean = function(str) {
   str = str
     .replace(/\r\n?|[\n\u2028\u2029]/g, '\n')
     .replace(/^\uFEFF/, '')
-    // (traditional)->  space/name     parameters    body     (lambda)-> parameters       body   multi-statement/single          keep body content
+    // (traditional)->  space/name     parameters    body     (lambda)-> parameters       body   multi-statement/single          keep body contest
     .replace(
       /^function(?:\s*|\s+[^(]*)\([^)]*\)\s*\{((?:.|\n)*?)\s*\}$|^\([^)]*\)\s*=>\s*(?:\{((?:.|\n)*?)\s*\}|((?:.|\n)*))$/,
       '$1$2$3'
@@ -10920,7 +10920,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * JsDiff.diffWords: Word (as defined by \b regex) diff which ignores whitespace
 	 * JsDiff.diffLines: Line based diff
 	 *
-	 * JsDiff.diffCss: Diff targeted at CSS content
+	 * JsDiff.diffCss: Diff targeted at CSS contest
 	 *
 	 * These methods are based on the implementation proposed in
 	 * "An O(ND) Difference Algorithm and its Variations" (Myers, 1986).
@@ -10996,7 +10996,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var maxEditLength = newLen + oldLen;
 	    var bestPath = [{ newPos: -1, components: [] }];
 
-	    // Seed editLength = 0, i.e. the content starts with the same values
+	    // Seed editLength = 0, i.e. the contest starts with the same values
 	    var oldPos = this.extractCommon(bestPath[0], newString, oldString, 0);
 	    if (bestPath[0].newPos + 1 >= newLen && oldPos + 1 >= oldLen) {
 	      // Identity per the equality and tokenizer
@@ -11342,7 +11342,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    linesAndNewlines.pop();
 	  }
 
-	  // Merge the content and line separators into single tokens
+	  // Merge the contest and line separators into single tokens
 	  for (var i = 0; i < linesAndNewlines.length; i++) {
 	    var line = linesAndNewlines[i];
 
@@ -11807,7 +11807,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else if (/^@@/.test(_line)) {
 	        index.hunks.push(parseHunk());
 	      } else if (_line && options.strict) {
-	        // Ignore unexpected content unless in strict mode
+	        // Ignore unexpected contest unless in strict mode
 	        throw new Error('Unknown line ' + (i + 1) + ' ' + JSON.stringify(_line));
 	      } else {
 	        i++;
@@ -12115,15 +12115,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function mergeLines(hunk, mineOffset, mineLines, theirOffset, theirLines) {
 	  // This will generally result in a conflicted hunk, but there are cases where the context
-	  // is the only overlap where we can successfully merge the content here.
+	  // is the only overlap where we can successfully merge the contest here.
 	  var mine = { offset: mineOffset, lines: mineLines, index: 0 },
 	      their = { offset: theirOffset, lines: theirLines, index: 0 };
 
-	  // Handle any leading content
+	  // Handle any leading contest
 	  insertLeading(hunk, mine, their);
 	  insertLeading(hunk, their, mine);
 
-	  // Now in the overlap content. Scan through and select the best changes from each.
+	  // Now in the overlap contest. Scan through and select the best changes from each.
 	  while (mine.index < mine.lines.length && their.index < their.lines.length) {
 	    var mineCurrent = mine.lines[mine.index],
 	        theirCurrent = their.lines[their.index];
