@@ -10,10 +10,7 @@ app.set('port', process.env.PORT || 3000);
 app.engine('hbs', handlebars.engine);
 app.set('view engine', 'hbs');
 app.use(express.static(__dirname + '/public'));
-
-if(12 === 14) {
-	console.log(123);
-}
+app.disable('x-powered-by');
 
 const fortunes = [
 	"Победи свои страхи, или они победят тебя.",
@@ -33,12 +30,23 @@ app.get('/', (req, res) => {
 	res.render('home');
 });
 
+app.get('/headers', function(req,res) {
+	res.set('Content-Type','text/plain');
+	let s = '';
+	for(let name in req.headers) {
+		s += name + ': ' + req.headers[name] + '\n';
+	}
+	res.json({"name": "dima"});
+	// res.send(s);
+});
+
 app.get('/about', (req, res) => {
 	res.render('about', {
 		fortune: fortune.getFortune(),
 		pageTestScript: '/qa/test-about.js'
 	});
 });
+
 app.get('/tours/hood-river', function(req, res){
 	res.render('tours/hood-river');
 });
@@ -48,7 +56,6 @@ app.get('/tours/request-group-rate', function(req, res){
 app.get('/tours/oregon-coast', function(req, res){
 	res.render('tours/oregon-coast');
 });
-if( null ) console.log( 'Бе-е!' );
 
 // пользовательская страница 404
 app.use( (req, res) => {
