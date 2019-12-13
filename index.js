@@ -4,6 +4,8 @@ const fortune = require('./lib/fortune.js');
 const formidable = require('formidable' );
 const jqupload = require('jquery-file-upload-middleware' );
 
+const credentials = require('./credentials.js');
+
 const handlebars = require('express-handlebars')
 	.create({
 		defaultLayout:'main',
@@ -24,6 +26,20 @@ app.use(express.static(__dirname + '/public'));
 app.disable('x-powered-by');
 
 app.use(require('body-parser'). urlencoded({ extended: true }));
+app.use(require('cookie-parser')(credentials.cookieSecret));
+app.use(require('express-session')({
+	resave: false,
+	saveUninitialized: false,
+	secret: credentials.cookieSecret,
+}));
+
+app.use(function(req, res, next){
+// Если имеется экстренное сообщение,
+// переместим его в контекст, а затем удалим
+	res.locals.flash = req.session.flash;
+	delete req.session.flash;
+	next();
+});
 
 const fortunes = [
 	"Победи свои страхи, или они победят тебя.",
@@ -40,6 +56,10 @@ app.use(function(req, res, next){
 });
 
 app.get('/', (req, res) => {
+	console.log(req.cookies);
+	req.session.userName = 'Anonymous';
+	const colorScheme = req.session.colorScheme || 'dark';
+	res.cookie('monster', 'nom nom');
 	res.render('home');
 });
 
